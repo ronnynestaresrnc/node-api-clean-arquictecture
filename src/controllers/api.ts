@@ -26,10 +26,34 @@ export const loadApiEndpoints = (app: Application): void => {
       console.log(error);
     }
   });
+
   app.get("/autos/:id", async (req: Request, response: Response) => {
     const id = parseInt(req.params.id);
     try {
       const res = await client.query("SELECT * FROM autos WHERE id = $1", [id]);
+      response.status(200).json(res.rows);
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+  app.get("/autos/categoria/:id", async (req: Request, response: Response) => {
+    const id = parseInt(req.params.id);
+    try {
+      const res = await client.query(
+        "SELECT marca, modelo,imagen from autos INNER JOIN categoria ON autos.idcategoria =categoria.id WHERE idcategoria = $1",
+        [id]
+      );
+      response.status(200).json(res.rows);
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
+  app.get("/categorias", async (req: Request, response: Response) => {
+    try {
+      const res = await client.query("SELECT * FROM categoria ");
+
       response.status(200).json(res.rows);
     } catch (error) {
       console.log(error);
