@@ -26,4 +26,13 @@ export const loadApiEndpoints = (app: Application): void => {
       console.log(error);
     }
   });
+  app.get("/autos/:id", async (req: Request, response: Response) => {
+    const id = parseInt(req.params.id);
+    try {
+      const res = await client.query("SELECT * FROM autos WHERE id = $1", [id]);
+      response.status(200).json(res.rows);
+    } catch (error) {
+      console.log(error);
+    }
+  });
 };
