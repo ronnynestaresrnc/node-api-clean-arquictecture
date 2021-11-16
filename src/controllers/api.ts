@@ -1,3 +1,4 @@
+import { throws } from "assert";
 import { Application, Request, Response } from "express";
 import { Client } from "pg";
 
@@ -94,21 +95,23 @@ export const loadApiEndpoints = (app: Application): void => {
       console.log(error);
     }
   });
-  app.post("/add/", async (req: Request, response: Response) => {
-    const { nombre, duracion, tutor, valoracion, precio, idespecialidad } =
-      req.body;
-    console.log(req.body);
+  app.post("/auth", async (req: Request, response: Response) => {
+    const { user, pass } = req.body;
+    const query = {
+      name: "fetch-user",
+      text: "SELECT * FROM users WHERE usuario LIKE  $1 ",
+      values: [user],
+    };
+
     try {
-      const res = await client.query(
-        "INSERT INTO courses (nombre,duracion, tutor,valoracion,precio,idespecialidad) VALUES ($1, $2,$3,$4,$5,$6) RETURNING id",
-        [nombre, duracion, tutor, valoracion, precio, idespecialidad]
-      );
-      const { rows } = await res;
-      console.log(rows);
-      const { id } = rows[0];
-      response.status(201).send(`User added with ID: ${id}`);
-    } catch (error) {
-      console.log(error);
+      const res = await client.query(query);
+      if (res.rowCount == 0)
+        return response.json({ message: "usuario no existe" });
+      if (res.rows[0].pass !== pass)
+        return response.json({ message: "password incorrecto" });
+      return response.json(res.rows[0]);
+    } catch (e) {
+      throws;
     }
   });
 };
