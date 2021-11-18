@@ -105,11 +105,9 @@ export const loadApiEndpoints = (app: Application): void => {
 
     try {
       const res = await client.query(query);
-      if (res.rowCount == 0)
-        return response.json({ message: "usuario no existe" });
-      if (res.rows[0].pass !== pass)
-        return response.json({ message: "password incorrecto" });
-      return response.json(res.rows[0]);
+      if (res.rowCount == 0) return response.json({ message: "0" });
+      if (res.rows[0].pass !== pass) return response.json({ message: "-1" });
+      return response.json({ message: "2", res: res.rows[0] });
     } catch (e) {
       throws;
     }
