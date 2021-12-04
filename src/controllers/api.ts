@@ -112,4 +112,21 @@ export const loadApiEndpoints = (app: Application): void => {
       throws;
     }
   });
+  app.post("/add", async (req: Request, response: Response) => {
+    const { nombre, tutor, duracion, valoracion, precio, idespecialidad } =
+      req.body;
+    const query = {
+      name: "fetch-user",
+      text: "insert into courses(nombre,tutor,duracion,valoracion,precio,idespecialidad) values($1,$2,$3,$4,$5,$6)",
+      values: [nombre, tutor, duracion, valoracion, precio, idespecialidad],
+    };
+
+    try {
+      const res = await client.query(query);
+
+      return response.json({ message: "agregado" });
+    } catch (e) {
+      throws;
+    }
+  });
 };
