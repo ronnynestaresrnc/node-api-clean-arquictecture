@@ -86,6 +86,17 @@ export const loadApiEndpoints = (app: Application): void => {
       }
     }
   );
+  app.get("/courses/:id", async (req: Request, response: Response) => {
+    const id = parseInt(req.params.id);
+    try {
+      const res = await client.query("SELECT * FROM courses WHERE id = $1", [
+        id,
+      ]);
+      response.status(200).json(res.rows);
+    } catch (error) {
+      console.log(error);
+    }
+  });
 
   app.get("/especialidades/", async (req: Request, response: Response) => {
     try {
