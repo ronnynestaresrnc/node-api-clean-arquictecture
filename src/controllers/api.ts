@@ -86,12 +86,33 @@ export const loadApiEndpoints = (app: Application): void => {
       }
     }
   );
+  app.put("/courses/:id", async (req: Request, response: Response) => {
+    const id = parseInt(req.params.id);
+
+    const { nombre, duracion, tutor, valoracion, precio, idespecialidad } =
+      req.body;
+    parseInt(valoracion);
+    parseInt(precio);
+    parseInt(idespecialidad);
+
+    try {
+      const res = await client.query(
+        "UPDATE  courses set nombre = $2 , tutor = $3, duracion = $4 ,valoracion =$5,precio =$6, idespecialidad =$7 WHERE id = $1",
+        [id, nombre, tutor, duracion, valoracion, precio, idespecialidad]
+      );
+      console.log(res.rows);
+      response.status(200).json({ message: "editado correctamente" });
+    } catch (error) {
+      console.log(error);
+    }
+  });
   app.get("/courses/:id", async (req: Request, response: Response) => {
     const id = parseInt(req.params.id);
     try {
       const res = await client.query("SELECT * FROM courses WHERE id = $1", [
         id,
       ]);
+      console.log(res.rows);
       response.status(200).json(res.rows);
     } catch (error) {
       console.log(error);
