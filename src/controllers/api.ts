@@ -118,6 +118,18 @@ export const loadApiEndpoints = (app: Application): void => {
       console.log(error);
     }
   });
+  app.delete("/courses/:id", async (req: Request, response: Response) => {
+    const id = parseInt(req.params.id);
+    try {
+      const res = await client.query("DELETE  FROM courses WHERE id = $1", [
+        id,
+      ]);
+      console.log(res.rows);
+      response.status(200).json({ message: "course eliminado correctamente" });
+    } catch (error) {
+      console.log(error);
+    }
+  });
 
   app.get("/especialidades/", async (req: Request, response: Response) => {
     try {
