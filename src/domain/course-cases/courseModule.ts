@@ -1,4 +1,3 @@
-export class Course {
-  readonly iiei  ;
-}
-ñ
+import { response } from "express";
+
+module.exports = { response };

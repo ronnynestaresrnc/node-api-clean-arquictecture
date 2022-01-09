@@ -2,7 +2,7 @@ import cors from "cors";
 import express from "express";
 import path from "path";
 
-import { loadApiEndpoints } from "./controllers/api";
+import { loadApiEndpoints } from "./infrastructure/controllers/api";
 
 // Create Express server
 const app = express();
